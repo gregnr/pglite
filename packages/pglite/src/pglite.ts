@@ -269,6 +269,18 @@ export class PGlite implements PGliteInterface {
   }
 
   /**
+   * Read a file from the database's virtual file system.
+   *
+   * Can be used with a Postgres `COPY` command to export data.
+   *
+   * @param path Path of the file to read
+   */
+  async readFile(path: string): Promise<Uint8Array> {
+    await this.#checkReady();
+    return this.emp.FS.readFile(path);
+  }
+
+  /**
    * Removes a file from the database's virtual file system.
    *
    * @param path Path of the file to remove

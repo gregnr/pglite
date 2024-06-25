@@ -40,6 +40,7 @@ export interface PGliteInterface {
   ): Promise<Results<T>>;
   exec(query: string, options?: QueryOptions): Promise<Array<Results>>;
   writeFile(path: string, data: string | ArrayBufferView): Promise<void>;
+  readFile(path: string): Promise<Uint8Array>;
   removeFile(path: string): Promise<void>;
   transaction<T>(
     callback: (tx: Transaction) => Promise<T>,

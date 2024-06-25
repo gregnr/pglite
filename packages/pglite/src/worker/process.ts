@@ -22,6 +22,9 @@ const worker = {
   async writeFile(path: string, data: string | ArrayBufferView) {
     return await db.writeFile(path, data);
   },
+  async readFile(path: string) {
+    return await db.readFile(path);
+  },
   async removeFile(path: string) {
     return await db.removeFile(path);
   },

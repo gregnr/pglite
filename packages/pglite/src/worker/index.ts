@@ -75,6 +75,10 @@ export class PGliteWorker implements PGliteInterface {
     return this.#worker.writeFile(path, data);
   }
 
+  async readFile(path: string) {
+    return this.#worker.readFile(path);
+  }
+
   async removeFile(path: string) {
     return this.#worker.removeFile(path);
   }
