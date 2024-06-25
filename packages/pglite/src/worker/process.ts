@@ -19,6 +19,12 @@ const worker = {
   async exec(query: string, options?: QueryOptions) {
     return await db.exec(query, options);
   },
+  async writeFile(path: string, data: string | ArrayBufferView) {
+    return await db.writeFile(path, data);
+  },
+  async removeFile(path: string) {
+    return await db.removeFile(path);
+  },
   async transaction(callback: (tx: any) => Promise<any>) {
     return await db.transaction((tx) => {
       return callback(Comlink.proxy(tx));

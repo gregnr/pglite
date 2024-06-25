@@ -319,3 +319,60 @@ test("basic transaction", async (t) => {
     affectedRows: 0,
   });
 });
+
+test("copy csv", async (t) => {
+  const db = new PGlite();
+  const csv = "name,age\nJohn,30\nJane,25";
+
+  const encoder = new TextEncoder();
+  const csvBuffer = encoder.encode(csv);
+
+  await db.writeFile("/tmp/test.csv", csvBuffer);
+
+  await db.query(`
+    CREATE TABLE persons (
+      id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+      name TEXT,
+      age INTEGER
+    );
+  `);
+
+  await db.exec(
+    "COPY persons (name, age) FROM '/tmp/test.csv' WITH CSV HEADER",
+    csvBuffer,
+  );
+
+  await db.removeFile("/tmp/test.csv");
+
+  const result = await db.query("SELECT * from persons");
+
+  t.deepEqual(result, {
+    rows: [
+      {
+        age: 30,
+        id: 1,
+        name: "John",
+      },
+      {
+        age: 25,
+        id: 2,
+        name: "Jane",
+      },
+    ],
+    fields: [
+      {
+        dataTypeID: 23,
+        name: "id",
+      },
+      {
+        dataTypeID: 25,
+        name: "name",
+      },
+      {
+        dataTypeID: 23,
+        name: "age",
+      },
+    ],
+    affectedRows: 0,
+  });
+});

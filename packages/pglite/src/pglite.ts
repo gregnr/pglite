@@ -256,6 +256,29 @@ export class PGlite implements PGliteInterface {
   }
 
   /**
+   * Writes a file into the database's virtual file system.
+   *
+   * Can be used with a Postgres `COPY` command to import data.
+   *
+   * @param path Path of the file to create
+   * @param data Contents of the file
+   */
+  async writeFile(path: string, data: string | ArrayBufferView) {
+    await this.#checkReady();
+    this.emp.FS.writeFile(path, data);
+  }
+
+  /**
+   * Removes a file from the database's virtual file system.
+   *
+   * @param path Path of the file to remove
+   */
+  async removeFile(path: string) {
+    await this.#checkReady();
+    this.emp.FS.unlink(path);
+  }
+
+  /**
    * Internal method to execute a query
    * Not protected by the transaction mutex, so it can be used inside a transaction
    * @param query The query to execute

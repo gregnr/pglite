@@ -71,6 +71,14 @@ export class PGliteWorker implements PGliteInterface {
     return this.#worker.exec(query, options);
   }
 
+  async writeFile(path: string, data: string | ArrayBufferView) {
+    return this.#worker.writeFile(path, data);
+  }
+
+  async removeFile(path: string) {
+    return this.#worker.removeFile(path);
+  }
+
   async transaction<T>(callback: (tx: any) => Promise<T>) {
     const callbackProxy = Comlink.proxy(callback);
     return this.#worker.transaction(callbackProxy);
